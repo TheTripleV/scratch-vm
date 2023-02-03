@@ -25,6 +25,9 @@ const {loadSound} = require('./import/load-sound.js');
 const {serializeSounds, serializeCostumes} = require('./serialization/serialize-assets');
 require('canvas-toBlob');
 
+const NetworkTablesManager = require('./engine/networktables-manager');
+
+
 const RESERVED_NAMES = ['_mouse_', '_stage_', '_edge_', '_myself_', '_random_'];
 
 const CORE_EXTENSIONS = [
@@ -52,6 +55,8 @@ class VirtualMachine extends EventEmitter {
          * @type {!Runtime}
          */
         this.runtime = new Runtime();
+        this.networktablesManager = NetworkTablesManager.getInstance();
+        this.networktablesManager.vm = this;
         centralDispatch.setService('runtime', this.runtime).catch(e => {
             log.error(`Failed to register runtime service: ${JSON.stringify(e)}`);
         });
